@@ -161,7 +161,7 @@ public:
         return last.end;
     }
 
-    void free(uint16_t pid) {
+    void release(uint16_t pid) {
         auto it = std::upper_bound(
             _free_ids.begin(), _free_ids.end(), pid,
             [](const uint16_t x, const interval& i) { return x > i.start; }

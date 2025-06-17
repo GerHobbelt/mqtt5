@@ -427,7 +427,7 @@ public:
     }
 
     void free_pid(uint16_t pid, bool was_throttled = false) {
-        _pid_allocator.free(pid);
+        _pid_allocator.release(pid);
         if (was_throttled)
             _async_sender.throttled_op_done();
     }
