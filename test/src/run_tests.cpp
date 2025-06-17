@@ -7,15 +7,18 @@
 
 #define BOOST_TEST_MODULE boost_mqtt5_tests
 
+#define BOOST_TEST_NO_MAIN
+
 #include <boost/test/included/unit_test.hpp>
 
 boost::unit_test::test_suite* init_tests(
-    int /*argc*/, char* /*argv*/[]
+    int argc, const char** argv
 ) {
     return nullptr;
 }
 
-int main(int argc, char* argv[]) {
+extern "C"
+int main(int argc, const char** argv) {
     return boost::unit_test::unit_test_main(&init_tests, argc, argv);
 }
 
