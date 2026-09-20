@@ -46,7 +46,7 @@ BOOST_FIXTURE_TEST_CASE(empty_path, shared_test_data) {
 
     asio::co_spawn(ioc, [&]() -> asio::awaitable<void> {
         auto [ec, eps, ap] = co_await ep.async_next_endpoint(use_nothrow_awaitable);
-        BOOST_TEST(ec == asio::error::host_not_found);
+        BOOST_TEST(ec == asio::error::try_again);
     }, [&finished](auto eptr) { finished = !eptr; });
 
     test::test_broker::run(ioc);
@@ -93,6 +93,9 @@ BOOST_FIXTURE_TEST_CASE(multiple_hosts, shared_test_data) {
             BOOST_TEST(ap.host == "127.0.0.1");
             BOOST_TEST(ap.port == "1000");
             BOOST_TEST(ap.path == "/~path1");
+
+            std::tie(ec, eps, ap) = co_await ep.async_next_endpoint(use_nothrow_awaitable);
+            BOOST_TEST(ec == asio::error::host_not_found);
 
             std::tie(ec, eps, ap) = co_await ep.async_next_endpoint(use_nothrow_awaitable);
             BOOST_TEST(ec == success);

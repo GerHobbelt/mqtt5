@@ -74,7 +74,7 @@ public:
         namespace asioex = boost::asio::experimental;
 
         if (_owner._servers.empty())
-            return complete_post(asio::error::host_not_found, {}, {});
+            return complete_post(asio::error::try_again, {}, {});
 
         _owner._current_host++;
 
@@ -117,7 +117,7 @@ public:
         if (!resolve_ec)
             return complete(error_code {}, std::move(epts), std::move(ap));
 
-        perform();
+        return complete(resolve_ec, {}, {});
     }
 
 private:
@@ -169,6 +169,10 @@ public:
 
     void clone_servers(const endpoints& other) {
         _servers = other._servers;
+    }
+
+    bool has_brokers() const noexcept {
+        return !_servers.empty();
     }
 
     using executor_type = asio::ip::tcp::resolver::executor_type;
